@@ -506,14 +506,6 @@
 </footer>
 
 <script>
-  // ============================================================
-  // BREVO API KEY – einmalig hier eintragen:
-  // Brevo → Settings → API Keys → neuen Key erstellen (kostenlos)
-  // ============================================================
-  const BREVO_API_KEY = "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";
-  const STUDIO_EMAIL = "wien-linzerstrasse@bodystreet.at";
-  const STUDIO_NAME  = "Bodystreet Wien Linzerstraße";
-
   async function sendLead() {
     const name     = document.getElementById('name').value.trim();
     const phone    = document.getElementById('phone').value.trim();
@@ -521,7 +513,6 @@
     const btn      = document.getElementById('submit-btn');
     const errorMsg = document.getElementById('error-msg');
 
-    // Validierung
     if (!name || !phone || !email) {
       errorMsg.style.display = 'block';
       errorMsg.textContent = '⚠️ Bitte fülle alle Felder aus.';
@@ -537,39 +528,17 @@
     btn.textContent = '⏳ Wird gesendet...';
     errorMsg.style.display = 'none';
 
-    const payload = {
-      sender: { name: "Bodystreet Landingpage", email: "noreply@bodystreet.at" },
-      to: [{ email: STUDIO_EMAIL, name: STUDIO_NAME }],
-      replyTo: { email: email, name: name },
-      subject: "🔥 Neuer Lead: " + name,
-      htmlContent: `
-        <div style="font-family:sans-serif;max-width:500px;margin:0 auto;padding:24px;background:#f9f9f9;border-radius:8px;">
-          <h2 style="color:#E30613;margin-bottom:8px;">🔥 Neuer Lead – Sommeraktion</h2>
-          <p style="color:#555;margin-bottom:24px;">Ein neuer Interessent hat das Probetraining-Formular ausgefüllt:</p>
-          <table style="width:100%;border-collapse:collapse;">
-            <tr><td style="padding:10px;background:#fff;border:1px solid #eee;font-weight:600;width:120px;">Name</td>
-                <td style="padding:10px;background:#fff;border:1px solid #eee;">${name}</td></tr>
-            <tr><td style="padding:10px;background:#f5f5f5;border:1px solid #eee;font-weight:600;">Telefon</td>
-                <td style="padding:10px;background:#f5f5f5;border:1px solid #eee;">${phone}</td></tr>
-            <tr><td style="padding:10px;background:#fff;border:1px solid #eee;font-weight:600;">E-Mail</td>
-                <td style="padding:10px;background:#fff;border:1px solid #eee;">${email}</td></tr>
-          </table>
-          <p style="margin-top:24px;padding:16px;background:#E30613;color:#fff;border-radius:6px;text-align:center;font-weight:700;">
-            ➡️ Bitte so schnell wie möglich zurückrufen!
-          </p>
-          <p style="color:#aaa;font-size:0.8rem;margin-top:16px;">Gesendet über die Bodystreet Sommeraktion-Landingpage</p>
-        </div>
-      `
-    };
-
     try {
-      const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+      const response = await fetch("https://formspree.io/f/xkolvlqb", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "api-key": BREVO_API_KEY
-        },
-        body: JSON.stringify(payload)
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({
+          name: name,
+          telefon: phone,
+          email: email,
+          _subject: "🔥 Neuer Lead: " + name,
+          nachricht: "Neues Probetraining über Sommeraktion-Landingpage"
+        })
       });
 
       if (response.ok) {
@@ -584,11 +553,10 @@
       btn.textContent = 'Angebot beanspruchen – Jetzt anmelden';
       errorMsg.style.display = 'block';
       errorMsg.textContent = '❌ Es gab ein Problem. Bitte ruf uns direkt an: 01/9239797';
-      console.error('Brevo Fehler:', err);
+      console.error('Formspree Fehler:', err);
     }
   }
 
-  // Enter-Taste im Formular
   document.addEventListener('keypress', function(e) {
     if (e.key === 'Enter') sendLead();
   });
