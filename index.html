@@ -543,6 +543,7 @@
 
       if (response.ok) {
         document.getElementById('lead-form').style.display = 'none';
+        fbq('track', 'Lead');
         document.getElementById('success-msg').style.display = 'block';
         document.getElementById('success-msg').scrollIntoView({ behavior: 'smooth', block: 'center' });
       } else {
@@ -561,6 +562,12 @@
     if (e.key === 'Enter') sendLead();
   });
 </script>
+
+
+<!-- WhatsApp Button -->
+<a href="https://wa.me/4369910522557?text=Hallo%2C%20ich%20interessiere%20mich%20f%C3%BCr%20die%20Sommeraktion%20(2%20Wochen%20gratis%20%2B%20100%E2%82%AC%20Startguthaben)." 
+   style="position:fixed;bottom:24px;right:24px;background:#0a0a0a;color:white;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 6px 18px rgba(0,0,0,0.2);z-index:60;text-decoration:none;"
+   title="WhatsApp Kontakt" target="_blank" rel="noopener">💬</a>
 
 </body>
 </html>
